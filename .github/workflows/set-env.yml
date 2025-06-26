@@ -1,0 +1,28 @@
+name: Deploy to Environment
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Step 1: Set environment based on branch'
+        run: |
+          if [[ $GITHUB_REF_NAME == 'main' ]]; then
+            echo "DEPLOY_HOST=prod.example.com" >> $GITHUB_ENV
+            echo "APP_ENV=production" >> $GITHUB_ENV
+          else
+            echo "DEPLOY_HOST=staging.example.com" >> $GITHUB_ENV
+            echo "APP_ENV=staging" >> $GITHUB_ENV
+          fi
+
+      - name: 'Step 2: Use the dynamic environment variables'
+        run: |
+          echo "Deploying to host: $DEPLOY_HOST"
+          echo "Using application environment: $APP_ENV"
+          # Here you would run your actual deployment script
+          # ./deploy.sh
