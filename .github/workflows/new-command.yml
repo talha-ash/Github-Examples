@@ -1,0 +1,25 @@
+name: Example CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Step 1: Download a tool and add its location to PATH"
+        run: |
+          # Create a fake directory and a fake executable script for demonstration
+          mkdir -p $HOME/my-custom-bin
+          echo '#!/bin/bash' > $HOME/my-custom-bin/my-tool
+          echo 'echo "Hello from my custom tool!"' >> $HOME/my-custom-bin/my-tool
+          chmod +x $HOME/my-custom-bin/my-tool
+
+          # Now, add the tool's directory to the GITHUB_PATH
+          echo "$HOME/my-custom-bin" >> $GITHUB_PATH
+
+      - name: "Step 2: Use the tool from the modified PATH"
+        run: |
+          echo "The PATH is now: $PATH"
+          echo "---"
+          # We can call 'my-tool' directly without knowing its full path!
+          my-tool
